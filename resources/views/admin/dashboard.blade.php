@@ -5,8 +5,4 @@
             Welcome {{ Auth::user()->name }}
         </h2>
     </x-slot>
-
-    <div class="py-12">
-        Home
-    </div>
 </x-app-layout>
