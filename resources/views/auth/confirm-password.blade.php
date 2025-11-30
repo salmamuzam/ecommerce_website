@@ -4,7 +4,7 @@
             <x-authentication-card-logo />
         </x-slot>
 
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-slate-600">
             {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
         </div>
 
@@ -15,7 +15,7 @@
 
             <div>
                 <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" autofocus />
+                <x-password-input id="password" class="block mt-1 w-full" name="password" placeholder="••••••••" required autocomplete="current-password" autofocus />
             </div>
 
             <div class="flex justify-end mt-4">

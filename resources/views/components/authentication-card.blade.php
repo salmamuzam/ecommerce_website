@@ -1,6 +1,6 @@
 @props(['width' => 'sm:max-w-md'])
 
-<div {{ $attributes->merge(['class' => 'min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100']) }}>
+<div {{ $attributes->merge(['class' => 'min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-[#F2F3F6] px-4 sm:px-0']) }}>
     <div>
         {{ $logo }}
     </div>
