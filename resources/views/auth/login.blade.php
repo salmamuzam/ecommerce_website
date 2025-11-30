@@ -17,12 +17,14 @@
 
             <div>
                 <x-label for="login" value="{{ __('Email or Username') }}" />
-                <x-input id="login" class="block w-full mt-1" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" />
+                <x-input id="login" class="block w-full mt-1" type="text" name="login" :value="old('login')" required
+                    autofocus autocomplete="username" />
             </div>
 
             <div class="mt-4">
                 <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block w-full mt-1" type="password" name="password" required autocomplete="current-password" />
+                <x-input id="password" class="block w-full mt-1" type="password" name="password" required
+                    autocomplete="current-password" />
             </div>
 
             <div class="block mt-4">
@@ -34,7 +36,8 @@
 
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
