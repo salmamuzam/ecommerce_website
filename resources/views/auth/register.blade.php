@@ -8,7 +8,9 @@
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
-
+ <h1 class="mb-4 text-xl font-bold leading-tight tracking-tight text-center text-teal-900 md:text-2xl">
+    Sign in to your account
+</h1>
             <div>
                 <x-label for="first_name" value="{{ __('First Name') }}" />
                 <x-input id="first_name" class="block w-full mt-1" type="text" name="first_name"
@@ -62,16 +64,28 @@
                         </div>
             @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
+            <div class="mt-6">
+    <x-button class="justify-center w-full">
+        {{ __('Register') }}
+    </x-button>
+</div>
+
+
+<div class="flex items-center justify-center mt-4">
+    <span class="text-sm text-gray-600">
+        Have an account?
+    </span>
+
+    @if (Route::has('login'))
+        <a href="{{ route('login') }}"
+           class="text-sm text-teal-600 underline ms-2 hover:text-teal-800">
+            {{ __('Log in') }}
+        </a>
+    @endif
+</div>
+
+
         </form>
     </x-authentication-card>
 </x-guest-layout>
