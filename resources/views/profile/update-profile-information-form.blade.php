@@ -55,7 +55,13 @@
         <!-- First Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="first_name" value="{{ __('First Name') }}" />
-            <x-input id="first_name" type="text" class="block w-full mt-1" wire:model="state.first_name" required autocomplete="first_name" />
+            <x-icon-input id="first_name" type="text" class="block w-full mt-1" wire:model="state.first_name" required autocomplete="first_name">
+                <x-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </x-slot>
+            </x-icon-input>
             <x-input-error for="first_name" class="mt-2" />
         </div>
 
@@ -63,7 +69,13 @@
 
           <div class="col-span-6 sm:col-span-4">
             <x-label for="last_name" value="{{ __('Last Name') }}" />
-            <x-input id="last_name" type="text" class="block w-full mt-1" wire:model="state.last_name" required autocomplete="last_name" />
+            <x-icon-input id="last_name" type="text" class="block w-full mt-1" wire:model="state.last_name" required autocomplete="last_name">
+                <x-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </x-slot>
+            </x-icon-input>
             <x-input-error for="last_name" class="mt-2" />
         </div>
 
@@ -71,14 +83,26 @@
 
           <div class="col-span-6 sm:col-span-4">
             <x-label for="user_name" value="{{ __('Username') }}" />
-            <x-input id="user_name" type="text" class="block w-full mt-1" wire:model="state.user_name" required autocomplete="user_name" />
+            <x-icon-input id="user_name" type="text" class="block w-full mt-1" wire:model="state.user_name" required autocomplete="user_name">
+                <x-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+                    </svg>
+                </x-slot>
+            </x-icon-input>
             <x-input-error for="user_name" class="mt-2" />
         </div>
 
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="block w-full mt-1" wire:model="state.email" required autocomplete="username" />
+            <x-icon-input id="email" type="email" class="block w-full mt-1" wire:model="state.email" required autocomplete="username">
+                <x-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-slate-500">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                    </svg>
+                </x-slot>
+            </x-icon-input>
             <x-input-error for="email" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())

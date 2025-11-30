@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return redirect()->route('login');
+});
 
 Route::middleware([
     'auth:sanctum',
@@ -19,8 +19,8 @@ Route::middleware([
 
 // When a user is logged, redirect to /home
 
-route::get('/home', [HomeController::class,'index']);
+route::get('/home', [HomeController::class, 'index']);
 
 // When the /adminDashboard route is accessed, it will check whether the user is logged in as well
 // If the user is not logged, it will direct the user to the login page
-route::get('/adminDashboard', [HomeController::class,'adminDashboard'])->middleware(['auth','admin']);
+route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->middleware(['auth', 'admin']);
