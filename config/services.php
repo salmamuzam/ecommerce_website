@@ -29,9 +29,9 @@ return [
     ],
 
     'google' => [
-        'client_id' => '984537475924-m8e13jhadl8jlddo34u3ouumm9m1d362.apps.googleusercontent.com',
-        'client_secret' => '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',
-        'redirect' => 'http://localhost:8000/auth/google/callback',
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
     'slack' => [
