@@ -28,3 +28,5 @@ route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->middle
 
 route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');
 route::get('auth/google/callback', [GoogleController::class, 'googleCallBack']);
+
+//
