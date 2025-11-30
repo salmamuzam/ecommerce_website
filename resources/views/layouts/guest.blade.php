@@ -18,7 +18,7 @@
         @livewireStyles
     </head>
     <body>
-        <div class="font-sans antialiased text-gray-900">
+        <div {{ $attributes->merge(['class' => 'font-sans antialiased text-gray-900']) }}>
             {{ $slot }}
         </div>
 
