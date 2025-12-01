@@ -19,7 +19,6 @@ Route::middleware([
 });
 
 // When a user is logged, redirect to /home
-
 route::get('/home', [HomeController::class, 'index']);
 
 // When the /adminDashboard route is accessed, it will check whether the user is logged in as well
@@ -29,4 +28,4 @@ route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->middle
 route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');
 route::get('auth/google/callback', [GoogleController::class, 'googleCallBack']);
 
-//
+
