@@ -23,8 +23,8 @@
             <div class="flex items-center justify-between lg:justify-center mb-6 lg:mb-0">
                 <!-- Close Button (Mobile) -->
                 <button @click="sidebarOpen = false" class="lg:hidden text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -59,7 +59,7 @@
                 <!-- Categories -->
                 <li>
                     <a href="{{ route('admin.categories') }}"
-                        class="text-teal-600 hover:text-teal-800 text-[15px] font-medium flex items-center gap-4 hover:bg-teal-50 rounded px-4 py-2 transition-all">
+                        class="{{ request()->routeIs('admin.categories') ? 'bg-teal-600 text-white' : 'text-teal-600 hover:text-teal-800 hover:bg-teal-50' }} text-[15px] font-medium flex items-center gap-4 rounded px-4 py-2 transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -73,7 +73,7 @@
                 <!-- Products -->
                 <li>
                     <a href="{{ route('admin.add-product') }}"
-                        class="text-teal-600 hover:text-teal-800 text-[15px] font-medium flex items-center gap-4 hover:bg-teal-50 rounded px-4 py-2 transition-all">
+                        class="{{ request()->routeIs('admin.add-product') ? 'bg-teal-600 text-white' : 'text-teal-600 hover:text-teal-800 hover:bg-teal-50' }} text-[15px] font-medium flex items-center gap-4 rounded px-4 py-2 transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -86,7 +86,7 @@
                 <!-- Order History -->
                 <li>
                     <a href="{{ route('admin.orders') }}"
-                        class="text-teal-600 hover:text-teal-800 text-[15px] font-medium flex items-center gap-4 hover:bg-teal-50 rounded px-4 py-2 transition-all">
+                        class="{{ request()->routeIs('admin.orders') ? 'bg-teal-600 text-white' : 'text-teal-600 hover:text-teal-800 hover:bg-teal-50' }} text-[15px] font-medium flex items-center gap-4 rounded px-4 py-2 transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,23 +132,23 @@
         </nav>
 
         <!-- Main Content -->
-        <div class="flex-1 p-6 lg:ml-0">
-            <!-- Mobile Header -->
-            <div class="lg:hidden flex items-center justify-between mb-6">
+        <div class="flex-1 lg:ml-0">
+            <!-- Mobile Header (Hamburger) -->
+            <div class="lg:hidden p-4 pb-0">
                 <button @click="sidebarOpen = true" class="text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round"  stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>
                 </button>
-                <div class="flex items-center gap-2 {{ $header_color ?? 'text-gray-800' }}">
-                    @if(isset($icon))
-                        <div class="w-6 h-6">
-                            {!! $icon !!}
-                        </div>
-                    @endif
-                    <span class="text-lg font-bold">{{ $title ?? "Aaliyah's Collection" }}</span>
+            </div>
+
+            <!-- Header Title -->
+            <div class="p-3 sm:p-5 pb-0 sm:pb-0 pt-6 lg:pt-10 antialiased">
+                <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
+                    <div class="px-4">
+                        <h1 class="text-xl font-bold text-black">{{ $title ?? "Aaliyah's Collection" }}</h1>
+                    </div>
                 </div>
-                <div class="w-6"></div> <!-- Spacer -->
             </div>
             {{ $slot }}
         </div>
