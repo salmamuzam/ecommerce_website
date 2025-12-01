@@ -1,17 +1,7 @@
 <div>
     <section class="p-3 sm:p-5 antialiased">
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
-            @if (session()->has('message'))
-                <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md mb-4" role="alert">
-                    <div class="flex">
-                        <div class="py-1"><svg class="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
-                        <div>
-                            <p class="font-bold">Success</p>
-                            <p class="text-sm">{{ session('message') }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endif
+            <x-alert-success :message="session('message')" />
             <div class="relative overflow-hidden">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                     <div class="flex-1 flex items-center space-x-2">
@@ -22,7 +12,7 @@
                     </div>
                     <div class="flex-shrink-0 flex flex-col items-start md:flex-row md:items-center lg:justify-end space-y-3 md:space-y-0 md:space-x-3 w-full md:w-auto">
                         <!-- Add Category Button -->
-                        <button type="button" data-modal-target="createCategoryModal" data-modal-toggle="createCategoryModal" class="flex items-center justify-center text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none w-full">
+                        <button type="button" wire:click="create" class="flex items-center justify-center text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 focus:outline-none w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
@@ -40,7 +30,7 @@
                                       <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                     </svg>
                                 </div>
-                                <input type="text" id="simple-search" placeholder="Search for categories" required="" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2">
+                                <input type="text" wire:model.live="search" id="simple-search" placeholder="Search for categories" required="" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2">
                             </div>
                         </form>
                     </div>
@@ -55,48 +45,59 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($categories as $category)
-                                <tr class="border-b hover:bg-gray-50">
-                                    <td class="px-4 py-3 text-center align-middle">
-                                        <div class="flex justify-center">
-                                            @if($category->image)
-                                                <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="h-10 w-10 rounded object-cover">
-                                            @else
-                                                <div class="h-10 w-10 rounded bg-gray-200"></div>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-center align-middle">
-                                        {{ $category->name }}
-                                    </th>
-                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-center align-middle">
-                                        <div class="flex items-center justify-center space-x-2">
-                                            <!-- Edit Button -->
-                                            <button wire:click="edit({{ $category->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
-                                                <span class="hidden md:inline">Edit</span>
-                                            </button>
-                                            <!-- Preview Button -->
-                                            <button wire:click="show({{ $category->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                </svg>
-                                                <span class="hidden md:inline">Preview</span>
-                                            </button>
-                                            <!-- Delete Button -->
-                                            <button wire:click="deleteId({{ $category->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-lg hover:bg-red-50 focus:ring-4 focus:ring-red-300 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
-                                                <span class="hidden md:inline">Delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                    @forelse ($categories as $category)
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-3 text-center align-middle">
+                                <div class="flex justify-center">
+                                    @if($category->image)
+                                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="h-10 w-10 rounded object-cover">
+                                    @else
+                                        <div class="h-10 w-10 rounded bg-gray-200"></div>
+                                    @endif
+                                </div>
+                            </td>
+                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-center align-middle">
+                                {{ $category->name }}
+                            </th>
+                            <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-center align-middle">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <button wire:click="edit({{ $category->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                        <span class="hidden md:inline">Edit</span>
+                                    </button>
+                                    <button wire:click="show({{ $category->id }})" data-modal-target="viewCategoryModal" data-modal-toggle="viewCategoryModal" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                        </svg>
+                                        <span class="hidden md:inline">Preview</span>
+                                    </button>
+                                    <button wire:click="deleteId({{ $category->id }})" data-modal-target="deleteModal" data-modal-toggle="deleteModal" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-lg hover:bg-red-50 focus:ring-4 focus:ring-red-300 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                        <span class="hidden md:inline">Delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        @if(!empty($search))
+                            <tr>
+                                <td colspan="3" class="px-4 py-3 text-center text-gray-500">
+                                    This category does not exist. Please add it
+                                </td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td colspan="3" class="px-4 py-3 text-center text-gray-500">
+                                    No categories found.
+                                </td>
+                            </tr>
+                        @endif
+                    @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -131,13 +132,15 @@
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" placeholder="Type category name" required="">
+                            <input type="text" wire:model.live="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" placeholder="Type category name" required="">
+                            @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @if(!empty($name) && !$errors->has('name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
                         </div>
                         <div class="col-span-2">
                             <label for="image" class="block mb-2 text-sm font-medium text-gray-900">Upload an image</label>
                             <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
                                 <div class="text-center">
-                                    @if ($image)
+                                    @if ($image && !$errors->has('image'))
                                         <img src="{{ $image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
                                     @else
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto size-12 text-gray-300">
@@ -147,7 +150,7 @@
                                     <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                                         <label for="image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
                                             <span>{{ $image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="image" type="file" wire:model="image" class="sr-only" accept="image/png, image/jpeg, image/webp">
+                                            <input id="image" type="file" wire:model.live="image" class="sr-only" accept="image/png, image/jpeg, image/webp">
                                         </label>
                                         <p class="pl-1">or drag and drop</p>
                                     </div>
@@ -155,6 +158,7 @@
                                 </div>
                             </div>
                             @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @if($image && !$errors->has('image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
@@ -185,13 +189,15 @@
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model="name" id="edit_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
+                            <input type="text" wire:model.live="name" id="edit_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
+                            @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @if(!empty($name) && !$errors->has('name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
                         </div>
                         <div class="col-span-2">
                             <label for="new_image" class="block mb-2 text-sm font-medium text-gray-900">Upload an image</label>
                             <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
                                 <div class="text-center">
-                                    @if ($new_image)
+                                    @if ($new_image && !$errors->has('new_image'))
                                         <img src="{{ $new_image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
                                     @elseif($old_image)
                                         <img src="{{ asset('storage/' . $old_image) }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
@@ -203,7 +209,7 @@
                                     <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                                         <label for="new_image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
                                             <span>{{ $new_image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="new_image" type="file" wire:model="new_image" class="sr-only" accept="image/png, image/jpeg, image/webp">
+                                            <input id="new_image" type="file" wire:model.live="new_image" class="sr-only" accept="image/png, image/jpeg, image/webp">
                                         </label>
                                         <p class="pl-1">or drag and drop</p>
                                     </div>
@@ -211,6 +217,7 @@
                                 </div>
                             </div>
                             @error('new_image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            @if(($new_image || $old_image) && !$errors->has('new_image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
                         </div>
                     </div>
                     <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
@@ -301,6 +308,10 @@
                 editModal.hide();
                 previewModal.hide();
                 deleteModal.hide();
+            });
+
+            Livewire.on('open-create-modal', () => {
+                createModal.show();
             });
 
             Livewire.on('open-edit-modal', () => {

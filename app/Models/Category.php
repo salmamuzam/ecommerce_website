@@ -15,4 +15,13 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    // Scopes
+    public function scopeSearch($query, $term)
+    {
+        $term = "%$term%";
+        $query->where(function ($query) use ($term) {
+            $query->where('name', 'like', $term);
+        });
+    }
 }
