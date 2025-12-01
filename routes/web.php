@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GoogleController;
+use App\Livewire\CategoryComponent;
+use App\Livewire\OrderManagementComponent;
+use App\Livewire\AddProductComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -23,7 +26,20 @@ route::get('/home', [HomeController::class, 'index']);
 
 // When the /adminDashboard route is accessed, it will check whether the user is logged in as well
 // If the user is not logged, it will direct the user to the login page
-route::get('/adminDashboard', [HomeController::class, 'adminDashboard'])->middleware(['auth', 'admin']);
+
+// Route route based on middleware
+// Must be verified, and must be an admin to access the following routes
+route::middleware(['auth', 'admin'])->group(function () {
+
+ route::get('/adminDashboard', [HomeController::class, 'adminDashboard']);
+ 
+ Route::get('/admin/categories', CategoryComponent::class)->name('admin.categories');
+
+ Route::get('/admin/add-product', AddProductComponent::class)->name('admin.add-product');
+
+ Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
+});
+
 
 route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');
 route::get('auth/google/callback', [GoogleController::class, 'googleCallBack']);
