@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GoogleController;
-use App\Livewire\CategoryComponent;
+use App\Livewire\CategoryManagementComponent;
 use App\Livewire\OrderManagementComponent;
-use App\Livewire\AddProductComponent;
+use App\Livewire\ProductManagementComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -31,13 +31,13 @@ route::get('/home', [HomeController::class, 'index']);
 // Must be verified, and must be an admin to access the following routes
 route::middleware(['auth', 'admin'])->group(function () {
 
- route::get('/adminDashboard', [HomeController::class, 'adminDashboard']);
- 
- Route::get('/admin/categories', CategoryComponent::class)->name('admin.categories');
+    route::get('/adminDashboard', [HomeController::class, 'adminDashboard']);
 
- Route::get('/admin/add-product', AddProductComponent::class)->name('admin.add-product');
+    Route::get('/admin/categories', CategoryManagementComponent::class)->name('admin.categories');
 
- Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
+    Route::get('/admin/add-product', ProductManagementComponent::class)->name('admin.add-product');
+
+    Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
 });
 
 

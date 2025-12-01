@@ -8,7 +8,7 @@ use App\Models\Category;
 
 use Livewire\WithFileUploads;
 
-class CategoryComponent extends Component
+class CategoryManagementComponent extends Component
 {
     use WithFileUploads;
 
@@ -168,7 +168,7 @@ class CategoryComponent extends Component
     {
         $categories = Category::search($this->search)->get();
 
-        return view('livewire.category-component', [
+        return view('livewire.category-management-component', [
             // Return all categories
             'categories' => $categories,
         ])->layout('components.layouts.admin', [
