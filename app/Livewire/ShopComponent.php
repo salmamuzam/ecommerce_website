@@ -57,11 +57,14 @@ class ShopComponent extends Component
                 'price' => $product->price,
                 'quantity' => 1,
                 'image' => $product->image,
+                'description' => $product->description,
             ];
         }
 
         session()->put('cart', $cart);
-        session()->flash('message', "{$product->title} added to cart.");
+
+        $this->dispatch('show-success-modal');
+        session()->flash('message', 'Product added to cart successfully!');
     }
 
     public function render()
