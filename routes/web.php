@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\CartComponent;
+use App\Livewire\ProductDetailComponent;
+use App\Livewire\ShopComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GoogleController;
@@ -38,6 +41,19 @@ route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/products', ProductManagementComponent::class)->name('admin.products');
 
     Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
+});
+
+Route::get('/shop', ShopComponent::class)->name('products.shop');
+
+// Load products by id
+Route::get('/product/{id}', ProductDetailComponent::class)->name('product.show');
+
+//TODO: Create Category Controller
+Route::get('/category/{id}', [CategoryController::class, 'index'])->name('category.show');
+
+Route::middleware(['auth',  'customer'])->group(function(){
+// Only customer can view this page
+Route::get('/cart', CartComponent::class)->name('cart');
 });
 
 
