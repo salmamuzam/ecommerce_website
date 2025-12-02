@@ -72,8 +72,8 @@
 
                 <!-- Products -->
                 <li>
-                    <a href="{{ route('admin.add-product') }}"
-                        class="{{ request()->routeIs('admin.add-product') ? 'bg-teal-600 text-white' : 'text-teal-600 hover:text-teal-800 hover:bg-teal-50' }} text-[15px] font-medium flex items-center gap-4 rounded px-4 py-2 transition-all">
+                    <a href="{{ route('admin.products') }}"
+                        class="{{ request()->routeIs('admin.products') ? 'bg-teal-600 text-white' : 'text-teal-600 hover:text-teal-800 hover:bg-teal-50' }} text-[15px] font-medium flex items-center gap-4 rounded px-4 py-2 transition-all">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"

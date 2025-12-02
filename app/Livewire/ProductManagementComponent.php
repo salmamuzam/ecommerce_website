@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\ProductForm;
 use App\Models\Category;
 use App\Models\Product;
 use Livewire\Component;
@@ -14,58 +15,37 @@ class ProductManagementComponent extends Component
     use WithFileUploads;
     use WithPagination;
 
-    // Form properties
-    public $title, $description, $price, $image, $category_id, $is_popular;
-    public $product_id; // For edit mode
-    public $is_edit = false;
-    public $new_image; // For edit mode upload
-    public $old_image; // For edit mode display
+    public ProductForm $form;
 
     // Filter properties
     public $search = '';
     public $selectedCategories = [];
     public $priceFrom;
     public $priceTo;
+    public $perPage = 5;
 
     // Mass action properties
     public $selectedProducts = [];
     public $selectAll = false;
 
-    // Pagination
-    public $perPage = 5;
-
     // View properties
-    public $view_product_id;
-    public $view_title;
-    public $view_description;
-    public $view_price;
-    public $view_category;
-    public $view_image;
-    public $view_popular;
+    public ?Product $viewingProduct = null;
+
+    // State
+    public $is_edit = false;
+    public $confirmingDeletion = false;
+    public $deletingId = null;
 
     // Listeners
     protected $listeners = ['deleteConfirmed' => 'deleteProduct'];
-
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        $this->view_product_id = $product->id;
-        $this->view_title = $product->title;
-        $this->view_description = $product->description;
-        $this->view_price = $product->price;
-        $this->view_category = $product->category->name ?? 'Uncategorized';
-        $this->view_image = $product->image;
-        $this->view_popular = $product->is_popular;
-
-        $this->dispatch('open-view-modal');
-    }
 
     public function mount()
     {
         // No need to load categories here as we'll load them in render for the filter
     }
 
-    // Reset pagination when search or filters change
+    // --- Filter & Pagination Methods ---
+
     public function updatedSearch()
     {
         $this->resetPage();
@@ -87,22 +67,6 @@ class ProductManagementComponent extends Component
         $this->resetPage();
     }
 
-    // Handle "Select All" checkbox
-    public function updatedSelectAll($value)
-    {
-        if ($value) {
-            $this->selectedProducts = $this->getProductsQuery()->pluck('id')->map(fn($id) => (string) $id)->toArray();
-        } else {
-            $this->selectedProducts = [];
-        }
-    }
-
-    // Handle individual checkbox selection to update "Select All" state
-    public function updatedSelectedProducts()
-    {
-        $this->selectAll = false;
-    }
-
     public function resetFilters()
     {
         $this->search = '';
@@ -112,109 +76,64 @@ class ProductManagementComponent extends Component
         $this->resetPage();
     }
 
-    // CRUD Methods
+    public $confirmingProductDeletion = false;
+    public $confirmingMultipleProductDeletion = false;
+    public $isCreateModalOpen = false;
+    public $isEditModalOpen = false;
+    public $isPreviewModalOpen = false;
 
     public function create()
     {
-        $this->resetInputFields();
-        $this->is_edit = false;
-        $this->dispatch('open-create-modal');
-    }
-
-    public function edit($id)
-    {
-        $product = Product::findOrFail($id);
-        $this->product_id = $id;
-        $this->title = $product->title;
-        $this->description = $product->description;
-        $this->price = $product->price;
-        $this->category_id = $product->category_id;
-        $this->is_popular = $product->is_popular;
-        $this->old_image = $product->image;
-        $this->new_image = null;
-        $this->is_edit = true;
-
-        $this->dispatch('open-edit-modal');
+        $this->form->reset();
+        $this->isCreateModalOpen = true;
     }
 
     public function saveProduct()
     {
-        $this->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required',
-            'image' => 'required|image|max:1024', // 1MB Max
-        ]);
-
-        $path = $this->image->store('products', 'public');
-
-        Product::create([
-            'title' => $this->title,
-            'category_id' => $this->category_id,
-            'description' => $this->description,
-            'price' => $this->price,
-            'image' => $path,
-            'is_popular' => $this->is_popular ?? false,
-        ]);
-
+        $this->form->store();
         session()->flash('message', 'Product added successfully!');
-        $this->dispatch('close-modal');
-        $this->resetInputFields();
+        $this->isCreateModalOpen = false;
+    }
+
+    public function edit(Product $product)
+    {
+        $this->form->setProduct($product);
+        $this->isEditModalOpen = true;
     }
 
     public function updateProduct()
     {
-        $this->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required',
-            'new_image' => 'nullable|image|max:1024',
-        ]);
-
-        $product = Product::findOrFail($this->product_id);
-
-        $data = [
-            'title' => $this->title,
-            'category_id' => $this->category_id,
-            'description' => $this->description,
-            'price' => $this->price,
-            'is_popular' => $this->is_popular ?? false,
-        ];
-
-        if ($this->new_image) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $data['image'] = $this->new_image->store('products', 'public');
-        }
-
-        $product->update($data);
-
+        $this->form->update();
         session()->flash('message', 'Product updated successfully!');
-        $this->dispatch('close-modal');
-        $this->resetInputFields();
+        $this->isEditModalOpen = false;
     }
 
     public function deleteId($id)
     {
-        $this->product_id = $id;
-        $this->dispatch('open-delete-modal');
+        $this->deletingId = $id;
+        $this->confirmingProductDeletion = true;
     }
 
     public function deleteProduct()
     {
-        $product = Product::findOrFail($this->product_id);
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        $product = Product::find($this->deletingId);
+        if ($product) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $product->delete();
+            session()->flash('message', 'Product deleted successfully!');
         }
-        $product->delete();
-        session()->flash('message', 'Product deleted successfully!');
-        $this->dispatch('close-modal');
+        $this->confirmingProductDeletion = false;
+        $this->deletingId = null;
     }
 
     public function deleteSelected()
+    {
+        $this->confirmingMultipleProductDeletion = true;
+    }
+
+    public function confirmDeleteSelected()
     {
         $products = Product::whereIn('id', $this->selectedProducts)->get();
         foreach ($products as $product) {
@@ -226,36 +145,39 @@ class ProductManagementComponent extends Component
         $this->selectedProducts = [];
         $this->selectAll = false;
         session()->flash('message', 'Selected products deleted successfully!');
+        $this->confirmingMultipleProductDeletion = false;
     }
 
-    public function togglePopular($id)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($id);
+        $this->viewingProduct = $product;
+        $this->isPreviewModalOpen = true;
+    }
+
+    public function togglePopular(Product $product)
+    {
         $product->is_popular = !$product->is_popular;
         $product->save();
+        session()->flash('message', 'Product popularity updated!');
     }
 
-    private function resetInputFields()
+    public function updatedSelectAll($value)
     {
-        $this->title = '';
-        $this->description = '';
-        $this->price = '';
-        $this->image = null;
-        $this->new_image = null;
-        $this->old_image = null;
-        $this->category_id = '';
-        $this->is_popular = false;
-        $this->product_id = null;
+        if ($value) {
+            $this->selectedProducts = $this->getProductsQuery()->pluck('id')->map(fn($id) => (string) $id)->toArray();
+        } else {
+            $this->selectedProducts = [];
+        }
     }
 
-    private function getProductsQuery()
+    public function getProductsQuery()
     {
         return Product::query()
             ->when($this->search, function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%');
             })
-            ->when(!empty($this->selectedCategories), function ($query) {
+            ->when($this->selectedCategories, function ($query) {
                 $query->whereIn('category_id', $this->selectedCategories);
             })
             ->when($this->priceFrom, function ($query) {
@@ -274,6 +196,10 @@ class ProductManagementComponent extends Component
         return view('livewire.product-management-component', [
             'products' => $products,
             'categories' => $categories,
-        ])->layout('components.layouts.admin', ['title' => 'Manage Products']);
+        ])->layout('components.layouts.admin', [
+                    'title' => 'Manage Products',
+                    'icon' => '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>',
+                    'header_color' => 'text-teal-600'
+                ]);
     }
 }

@@ -305,318 +305,182 @@
     </section>
 
     <!-- Create Product Modal -->
-    <div id="createProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Create New Product
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="createProductModal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <form class="p-4 md:p-5" wire:submit.prevent="saveProduct">
-                    <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-3">
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model="title" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
-                            @error('title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Price (LKR)</label>
-                            <input type="number" wire:model="price" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
-                            @error('price') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                            <label for="category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
-<div x-data="{ open: false, selected: @entangle('category_id'), categories: {{ $categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name])->values()->toJson() }} }">
-                                <div class="relative">
-                                    <button type="button" @click="open = !open" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 text-left flex justify-between items-center">
-                                        <span x-text="selected ? (categories.find(c => c.id == selected)?.name || 'Select category') : 'Select category'"></span>
-                                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </button>
-                                    <div x-show="open" @click.away="open = false" class="absolute z-10 w-full bg-white rounded-lg shadow-lg border border-gray-200 mt-1 max-h-60 overflow-y-auto" style="display: none;">
-                                        <template x-for="category in categories" :key="category.id">
-                                            <div @click="selected = category.id; open = false" class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700" x-text="category.name"></div>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
-                            @error('category_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                             <label class="block mb-2 text-sm font-medium text-gray-900">Mark as Popular</label>
-                             <label class="relative inline-flex items-center cursor-pointer w-full h-[42px]">
-                                <input type="checkbox" value="" class="sr-only peer" wire:model="is_popular">
-                                <div class="w-full h-full bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-lg peer peer-checked:bg-teal-600 transition-colors duration-300"></div>
-                                <div class="absolute top-1 left-1 bg-white border-gray-300 border rounded-md h-[calc(100%-8px)] w-[calc(50%-4px)] transition-transform duration-300 peer-checked:translate-x-full shadow-sm"></div>
-                            </label>
-                        </div>
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
-                            <textarea id="description" wire:model="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-teal-500 focus:border-teal-500" placeholder="Write product description here"></textarea>
-                            @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="image" class="block mb-2 text-sm font-medium text-gray-900">Product Image</label>
-                            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
-                                <div class="text-center">
-                                    @if ($image && !$errors->has('image'))
-                                        <img src="{{ $image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto size-12 text-gray-300">
-                                          <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                        </svg>
-                                    @endif
-                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                        <label for="image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
-                                            <span>{{ $image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="image" type="file" wire:model.live="image" class="sr-only" accept="image/png, image/jpeg, image/webp">
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs leading-5 text-gray-600">PNG, JPG, WebP up to 1MB</p>
-                                </div>
-                            </div>
-                            @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
+    <x-custom-modal wire:model.live="isCreateModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Create New Product
+        </x-slot>
+
+        <x-slot name="content">
+            <form wire:submit.prevent="saveProduct">
+                <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-2">
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                        <x-input type="text" wire:model="form.title" id="name" class="block w-full" required />
+                        <x-input-error for="form.title" class="mt-2" />
                     </div>
-                    <button type="submit" class="w-full text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        Add new product
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+                    <div class="col-span-1">
+                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Price (LKR)</label>
+                        <x-input type="number" wire:model="form.price" id="price" class="block w-full" required />
+                        <x-input-error for="form.price" class="mt-2" />
+                    </div>
+                    <div class="col-span-1">
+                        <label for="category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
+                        <x-select wire:model="form.category_id" :options="$categories->pluck('name', 'id')" placeholder="Select category" />
+                        <x-input-error for="form.category_id" class="mt-2" />
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                         <label class="block mb-2 text-sm font-medium text-gray-900">Mark as Popular</label>
+                         <label class="relative inline-flex items-center cursor-pointer w-full h-[42px]">
+                            <input type="checkbox" value="" class="sr-only peer" wire:model="form.is_popular">
+                            <div class="w-full h-full bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-lg peer peer-checked:bg-teal-600 transition-colors duration-300"></div>
+                            <div class="absolute top-1 left-1 bg-white border-gray-300 border rounded-md h-[calc(100%-8px)] w-[calc(50%-4px)] transition-transform duration-300 peer-checked:translate-x-full shadow-sm"></div>
+                        </label>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                        <x-textarea id="description" wire:model="form.description" rows="4" placeholder="Write product description here" />
+                        <x-input-error for="form.description" class="mt-2" />
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <x-file-input model="form.image" label="Product Image" :preview="$form->image ? $form->image->temporaryUrl() : null" />
+                    </div>
+                </div>
+                <button type="submit" class="w-full text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Add new product
+                </button>
+            </form>
+        </x-slot>
+    </x-custom-modal>
 
     <!-- Edit Product Modal -->
-    <div id="editProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Edit Product
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="editProductModal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <form class="p-4 md:p-5" wire:submit.prevent="updateProduct">
-                    <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-3">
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model="title" id="edit_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
-                            @error('title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                            <label for="edit_price" class="block mb-2 text-sm font-medium text-gray-900">Price (LKR)</label>
-                            <input type="number" wire:model="price" id="edit_price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" required="">
-                            @error('price') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                            <label for="edit_category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
-<div x-data="{ open: false, selected: @entangle('category_id'), categories: {{ $categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name])->values()->toJson() }} }">
-                                <div class="relative">
-                                    <button type="button" @click="open = !open" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 text-left flex justify-between items-center">
-                                        <span x-text="selected ? (categories.find(c => c.id == selected)?.name || 'Select category') : 'Select category'"></span>
-                                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                    </button>
-                                    <div x-show="open" @click.away="open = false" class="absolute z-10 w-full bg-white rounded-lg shadow-lg border border-gray-200 mt-1 max-h-60 overflow-y-auto" style="display: none;">
-                                        <template x-for="category in categories" :key="category.id">
-                                            <div @click="selected = category.id; open = false" class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700" x-text="category.name"></div>
-                                        </template>
-                                    </div>
-                                </div>
-                            </div>
-                            @error('category_id') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1">
-                             <label class="block mb-2 text-sm font-medium text-gray-900">Mark as Popular</label>
-                             <label class="relative inline-flex items-center cursor-pointer w-full h-[42px]">
-                                <input type="checkbox" value="" class="sr-only peer" wire:model="is_popular">
-                                <div class="w-full h-full bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-lg peer peer-checked:bg-teal-600 transition-colors duration-300"></div>
-                                <div class="absolute top-1 left-1 bg-white border-gray-300 border rounded-md h-[calc(100%-8px)] w-[calc(50%-4px)] transition-transform duration-300 peer-checked:translate-x-full shadow-sm"></div>
-                            </label>
-                        </div>
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="edit_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
-                            <textarea id="edit_description" wire:model="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-teal-500 focus:border-teal-500"></textarea>
-                            @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
-                        <div class="col-span-1 sm:col-span-3">
-                            <label for="new_image" class="block mb-2 text-sm font-medium text-gray-900">Product Image</label>
-                            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
-                                <div class="text-center">
-                                    @if ($new_image && !$errors->has('new_image'))
-                                        <img src="{{ $new_image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @elseif($old_image)
-                                        <img src="{{ asset('storage/' . $old_image) }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto size-12 text-gray-300">
-                                          <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                        </svg>
-                                    @endif
-                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                        <label for="new_image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
-                                            <span>{{ $new_image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="new_image" type="file" wire:model.live="new_image" class="sr-only" accept="image/png, image/jpeg, image/webp">
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs leading-5 text-gray-600">PNG, JPG, WebP up to 1MB</p>
-                                </div>
-                            </div>
-                            @error('new_image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
+    <x-custom-modal wire:model.live="isEditModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Edit Product
+        </x-slot>
+
+        <x-slot name="content">
+            <form wire:submit.prevent="updateProduct">
+                <div class="grid gap-4 mb-4 grid-cols-1 sm:grid-cols-2">
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                        <x-input type="text" wire:model="form.title" id="edit_name" class="block w-full" required />
+                        <x-input-error for="form.title" class="mt-2" />
                     </div>
-                    <button type="submit" class="text-white w-full inline-flex justify-center items-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 012 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-                        Update product
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+                    <div class="col-span-1">
+                        <label for="edit_price" class="block mb-2 text-sm font-medium text-gray-900">Price (LKR)</label>
+                        <x-input type="number" wire:model="form.price" id="edit_price" class="block w-full" required />
+                        <x-input-error for="form.price" class="mt-2" />
+                    </div>
+                    <div class="col-span-1">
+                        <label for="edit_category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
+                        <x-select wire:model="form.category_id" :options="$categories->pluck('name', 'id')" placeholder="Select category" />
+                        <x-input-error for="form.category_id" class="mt-2" />
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                         <label class="block mb-2 text-sm font-medium text-gray-900">Mark as Popular</label>
+                         <label class="relative inline-flex items-center cursor-pointer w-full h-[42px]">
+                            <input type="checkbox" value="" class="sr-only peer" wire:model="form.is_popular">
+                            <div class="w-full h-full bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 rounded-lg peer peer-checked:bg-teal-600 transition-colors duration-300"></div>
+                            <div class="absolute top-1 left-1 bg-white border-gray-300 border rounded-md h-[calc(100%-8px)] w-[calc(50%-4px)] transition-transform duration-300 peer-checked:translate-x-full shadow-sm"></div>
+                        </label>
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <label for="edit_description" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                        <x-textarea id="edit_description" wire:model="form.description" rows="4" />
+                        <x-input-error for="form.description" class="mt-2" />
+                    </div>
+                    <div class="col-span-1 sm:col-span-2">
+                        <x-file-input model="form.new_image" label="Product Image" :preview="$form->new_image ? $form->new_image->temporaryUrl() : ($form->old_image ? asset('storage/' . $form->old_image) : null)" />
+                    </div>
+                </div>
+                <button type="submit" class="text-white w-full inline-flex justify-center items-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 012 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                    Update product
+                </button>
+            </form>
+        </x-slot>
+    </x-custom-modal>
 
     <!-- Delete Product Modal -->
-    <div id="deleteProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="deleteProductModal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-4 md:p-5 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this product?</h3>
-                    <button wire:click="deleteProduct" data-modal-hide="deleteProductModal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                        Yes, I'm sure
-                    </button>
-                    <button data-modal-hide="deleteProductModal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-custom-confirmation-modal wire:model.live="confirmingProductDeletion" maxWidth="md">
+        <x-slot name="content">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this product?</h3>
+            <button wire:click="deleteProduct" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                Yes, I'm sure
+            </button>
+            <button @click="show = false" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
+        </x-slot>
+    </x-custom-confirmation-modal>
+
+    <!-- Mass Delete Product Modal -->
+    <x-custom-confirmation-modal wire:model.live="confirmingMultipleProductDeletion" maxWidth="md">
+        <x-slot name="content">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete the selected products?</h3>
+            <button wire:click="confirmDeleteSelected" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                Yes, delete all
+            </button>
+            <button @click="show = false" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
+        </x-slot>
+    </x-custom-confirmation-modal>
 
     <!-- Preview Product Modal -->
-    <div id="viewProductModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <!-- Modal content -->
-            <div class="relative p-4 bg-white rounded-lg shadow sm:p-5">
-                <!-- Modal header -->
-                <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Product Details
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="viewProductModal">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+    <x-custom-modal wire:model.live="isPreviewModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Product Details
+        </x-slot>
+
+        <x-slot name="content">
+            <div class="mb-4 text-center">
+                @if($viewingProduct && $viewingProduct->image)
+                    <img src="{{ asset('storage/' . $viewingProduct->image) }}" alt="{{ $viewingProduct->title }}" class="mx-auto h-48 object-cover rounded-lg">
+                @else
+                    <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                         </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <div class="p-4 md:p-5">
-                    <div class="mb-4 text-center">
-                        @if($view_image)
-                            <img src="{{ asset('storage/' . $view_image) }}" alt="{{ $view_title }}" class="mx-auto h-48 object-cover rounded-lg">
-                        @else
-                            <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                </svg>
-                            </div>
-                        @endif
                     </div>
-                    <div class="grid gap-4 mb-4 sm:grid-cols-3">
-                        <div class="sm:col-span-3">
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Product Name</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
-                                {{ $view_title }}
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Category</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
-                                {{ $view_category }}
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Price</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
-                                LKR {{ number_format($view_price, 2) }}
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Popular</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
-                                {{ $view_popular ? 'Yes' : 'No' }}
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Description</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 min-h-[100px]">
-                                {{ $view_description }}
-                            </div>
-                        </div>
+                @endif
+            </div>
+            <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Product Name</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        {{ $viewingProduct->title ?? '' }}
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Category</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        {{ $viewingProduct->category->name ?? 'Uncategorized' }}
+                    </div>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Price</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        LKR {{ number_format($viewingProduct->price ?? 0, 2) }}
+                    </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Popular</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        {{ ($viewingProduct->is_popular ?? false) ? 'Yes' : 'No' }}
+                    </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 min-h-[100px]">
+                        {{ $viewingProduct->description ?? '' }}
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    @script
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            const modalOptions = {
-                backdrop: 'dynamic',
-                backdropClasses: 'bg-gray-900/50 fixed inset-0 z-40',
-                closable: true,
-            };
-
-            const createModal = new Modal(document.getElementById('createProductModal'), modalOptions);
-            const editModal = new Modal(document.getElementById('editProductModal'), modalOptions);
-            const deleteModal = new Modal(document.getElementById('deleteProductModal'), modalOptions);
-            const viewModal = new Modal(document.getElementById('viewProductModal'), modalOptions); // Initialize viewModal
-
-            Livewire.on('close-modal', () => {
-                createModal.hide();
-                editModal.hide();
-                deleteModal.hide();
-                viewModal.hide(); // Hide view modal on close-modal
-            });
-
-            Livewire.on('open-create-modal', () => {
-                createModal.show();
-            });
-
-            Livewire.on('open-edit-modal', () => {
-                editModal.show();
-            });
-
-            Livewire.on('open-delete-modal', () => {
-                deleteModal.show();
-            });
-
-            Livewire.on('open-view-modal', () => { // Listener for opening view modal
-                viewModal.show();
-            });
-        });
-    </script>
-    @endscript
-</div>
-```
+        </x-slot>
+    </x-custom-modal></div>

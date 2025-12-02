@@ -35,7 +35,7 @@ route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/categories', CategoryManagementComponent::class)->name('admin.categories');
 
-    Route::get('/admin/add-product', ProductManagementComponent::class)->name('admin.add-product');
+    Route::get('/admin/products', ProductManagementComponent::class)->name('admin.products');
 
     Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
 });

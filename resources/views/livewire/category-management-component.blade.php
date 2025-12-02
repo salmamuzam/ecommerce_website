@@ -130,222 +130,102 @@
     </section>
 
     <!-- Create Category Modal -->
-    <div id="createCategoryModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                    <h3 class="text-lg font-semibold text-gray-900">
-                        Create New Category
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-toggle="createCategoryModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <form class="p-4 md:p-5" wire:submit.prevent="saveCategory">
-                    <div class="grid gap-4 mb-4 grid-cols-2">
-                        <div class="col-span-2">
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model.live="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" placeholder="hijab" required="">
-                            @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                            @if(!empty($name) && !$errors->has('name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
-                        </div>
-                        <div class="col-span-2">
-                            <label for="image" class="block mb-2 text-sm font-medium text-gray-900">Upload an image</label>
-                            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
-                                <div class="text-center">
-                                    @if ($image && !$errors->has('image'))
-                                        <img src="{{ $image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto size-12 text-gray-300">
-                                          <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                        </svg>
-                                    @endif
-                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                        <label for="image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
-                                            <span>{{ $image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="image" type="file" wire:model.live="image" class="sr-only" accept="image/png, image/jpeg, image/webp">
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs leading-5 text-gray-600">PNG, JPG, WebP up to 1MB</p>
-                                </div>
-                            </div>
-                            @error('image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                            @if($image && !$errors->has('image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
-                        </div>
+    <x-custom-modal wire:model.live="isCreateModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Create New Category
+        </x-slot>
+
+        <x-slot name="content">
+            <form wire:submit.prevent="saveCategory">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                        <x-input type="text" wire:model="form.name" id="name" class="block w-full" placeholder="hijab" required />
+                        <x-input-error for="form.name" class="mt-2" />
+                        @if(!empty($form->name) && !$errors->has('form.name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
                     </div>
-                    <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        Add new category
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+                    <div class="col-span-2">
+                        <x-file-input model="form.image" label="Upload an image" :preview="$form->image ? $form->image->temporaryUrl() : null" />
+                        @if($form->image && !$errors->has('form.image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
+                    </div>
+                </div>
+                <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Add new category
+                </button>
+            </form>
+        </x-slot>
+    </x-custom-modal>
 
     <!-- Edit Category Modal -->
-    <div id="editCategoryModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                    <h3 class="text-lg font-semibold text-gray-900">Edit Category</h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="editCategoryModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <form class="p-4 md:p-5" wire:submit.prevent="updateCategory">
-                    <div class="grid gap-4 mb-4 grid-cols-2">
-                        <div class="col-span-2">
-                            <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <input type="text" wire:model.live="name" id="edit_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-600 focus:border-teal-600 block w-full p-2.5" placeholder="hijab" required="">
-                            @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                            @if(!empty($name) && !$errors->has('name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
-                        </div>
-                        <div class="col-span-2">
-                            <label for="new_image" class="block mb-2 text-sm font-medium text-gray-900">Upload an image</label>
-                            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-300 px-6 py-10">
-                                <div class="text-center">
-                                    @if ($new_image && !$errors->has('new_image'))
-                                        <img src="{{ $new_image->temporaryUrl() }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @elseif($old_image)
-                                        <img src="{{ asset('storage/' . $old_image) }}" class="mx-auto h-32 object-cover rounded-lg mb-4">
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto size-12 text-gray-300">
-                                          <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                        </svg>
-                                    @endif
-                                    <div class="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                                        <label for="new_image" class="relative cursor-pointer rounded-md bg-white font-semibold text-teal-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-teal-600 focus-within:ring-offset-2 hover:text-teal-500">
-                                            <span>{{ $new_image ? 'Change file' : 'Upload a file' }}</span>
-                                            <input id="new_image" type="file" wire:model.live="new_image" class="sr-only" accept="image/png, image/jpeg, image/webp">
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs leading-5 text-gray-600">PNG, JPG, WebP up to 1MB</p>
-                                </div>
-                            </div>
-                            @error('new_image') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                            @if(($new_image || $old_image) && !$errors->has('new_image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
-                        </div>
+    <x-custom-modal wire:model.live="isEditModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Edit Category
+        </x-slot>
+
+        <x-slot name="content">
+            <form wire:submit.prevent="updateCategory">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <label for="edit_name" class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                        <x-input type="text" wire:model="form.name" id="edit_name" class="block w-full" placeholder="hijab" required />
+                        <x-input-error for="form.name" class="mt-2" />
+                        @if(!empty($form->name) && !$errors->has('form.name')) <span class="text-teal-600 text-xs">Valid name</span> @endif
                     </div>
-                    <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                        </svg>
-                        Edit Category
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+                    <div class="col-span-2">
+                        <x-file-input model="form.new_image" label="Upload an image" :preview="$form->new_image ? $form->new_image->temporaryUrl() : ($form->old_image ? asset('storage/' . $form->old_image) : null)" />
+                        @if(($form->new_image || $form->old_image) && !$errors->has('form.new_image')) <span class="text-teal-600 text-xs">Valid file format</span> @endif
+                    </div>
+                </div>
+                <button type="submit" class="text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                    Edit Category
+                </button>
+            </form>
+        </x-slot>
+    </x-custom-modal>
 
     <!-- Preview Category Modal -->
-    <div id="previewCategoryModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
-                    <h3 class="text-lg font-semibold text-gray-900">Category Preview</h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="previewCategoryModal">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <div class="p-4 md:p-5">
-                    @if($view_category)
-                        <div class="mb-4 text-center">
-                             @if($view_category->image)
-                                <img src="{{ asset('storage/' . $view_category->image) }}" alt="{{ $view_category->name }}" class="mx-auto h-48 object-cover rounded-lg">
-                            @else
-                                <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">No Image</div>
-                            @endif
-                        </div>
-                        <div class="mb-4">
-                            <label class="block mb-2 text-sm font-medium text-gray-900">Name</label>
-                            <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
-                                {{ $view_category->name }}
-                            </div>
-                        </div>
+    <x-custom-modal wire:model.live="isPreviewModalOpen" maxWidth="md">
+        <x-slot name="title">
+            Category Preview
+        </x-slot>
+
+        <x-slot name="content">
+            @if($viewingCategory)
+                <div class="mb-4 text-center">
+                        @if($viewingCategory->image)
+                        <img src="{{ asset('storage/' . $viewingCategory->image) }}" alt="{{ $viewingCategory->name }}" class="mx-auto h-48 object-cover rounded-lg">
+                    @else
+                        <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">No Image</div>
                     @endif
                 </div>
-            </div>
-        </div>
-    </div>
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">Name</label>
+                    <div class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                        {{ $viewingCategory->name }}
+                    </div>
+                </div>
+            @endif
+        </x-slot>
+    </x-custom-modal>
 
     <!-- Delete Category Modal -->
-    <div id="deleteCategoryModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" wire:ignore.self>
-        <div class="relative p-4 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow">
-                <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="deleteCategoryModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-4 md:p-5 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-black">Are you sure you want to delete this category?</h3>
-                    <button wire:click="deleteCategory" data-modal-hide="deleteCategoryModal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                        Yes, I'm sure
-                    </button>
-                    <button data-modal-hide="deleteCategoryModal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @script
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            const modalOptions = {
-                backdrop: 'dynamic',
-                backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-                closable: true,
-            };
-
-            const createModal = new Modal(document.getElementById('createCategoryModal'), modalOptions);
-            const editModal = new Modal(document.getElementById('editCategoryModal'), modalOptions);
-            const previewModal = new Modal(document.getElementById('previewCategoryModal'), modalOptions);
-            const deleteModal = new Modal(document.getElementById('deleteCategoryModal'), modalOptions);
-
-            Livewire.on('close-modal', () => {
-                createModal.hide();
-                editModal.hide();
-                previewModal.hide();
-                deleteModal.hide();
-            });
-
-            Livewire.on('open-create-modal', () => {
-                createModal.show();
-            });
-
-            Livewire.on('open-edit-modal', () => {
-                editModal.show();
-            });
-
-            Livewire.on('open-preview-modal', () => {
-                previewModal.show();
-            });
-
-            Livewire.on('open-delete-modal', () => {
-                deleteModal.show();
-            });
-        });
-    </script>
-    @endscript
+    <x-custom-confirmation-modal wire:model.live="confirmingCategoryDeletion" maxWidth="md">
+        <x-slot name="content">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+            </svg>
+            <h3 class="mb-5 text-lg font-normal text-black">Are you sure you want to delete this category?</h3>
+            <button wire:click="deleteCategory" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                Yes, I'm sure
+            </button>
+            <button @click="show = false" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">No, cancel</button>
+        </x-slot>
+    </x-custom-confirmation-modal>
 </div>
 </div>

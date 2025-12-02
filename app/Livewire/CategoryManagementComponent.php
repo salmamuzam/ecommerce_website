@@ -2,26 +2,27 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
+use App\Livewire\Forms\CategoryForm;
 use App\Models\Category;
-
-
+use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryManagementComponent extends Component
 {
     use WithFileUploads;
 
-    // Define variables
-    public $name;
-    public $image;
-    // public $categories; // Removed for dynamic fetching
-    public $edit_id;
-    public $delete_id;
-    public $view_category;
-    public $new_image; // For handling new image upload during edit
-    public $old_image; // For storing existing image path during edit
+    public CategoryForm $form;
+
+    // State
     public $search = '';
+    public $delete_id;
+    public ?Category $viewingCategory = null;
+
+    public $isCreateModalOpen = false;
+    public $isEditModalOpen = false;
+    public $confirmingCategoryDeletion = false;
+    public $isPreviewModalOpen = false;
 
     public function mount()
     {
@@ -30,138 +31,54 @@ class CategoryManagementComponent extends Component
 
     public function create()
     {
-        $this->resetInput();
-        $this->addError('name', 'Name is required');
-        $this->addError('image', 'Image is required');
-        $this->dispatch('open-create-modal');
+        $this->form->reset();
+        $this->isCreateModalOpen = true;
     }
-
-    protected function rules()
-    {
-        return [
-            'name' => 'required|regex:/^[a-zA-Z\s]+$/|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:1024',
-            'new_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
-        ];
-    }
-
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
-
-    // Function to send category to the database
 
     public function saveCategory()
     {
-        // Validate inputs
-        $this->validate([
-            'name' => $this->rules()['name'],
-            'image' => $this->rules()['image'],
-        ]);
-
-        // Store image
-        $imagePath = $this->uploadImage($this->image);
-
-        // Create the category in the database
-        Category::create([
-            'name' => $this->name,
-            'image' => $imagePath
-        ]);
-
-        // Empty the input fields once the category is added
-        $this->resetInput();
-
-        // Flash message
+        $this->form->store();
         session()->flash('message', 'Category added successfully!');
-
-        // Close modal (handled by frontend JS usually, or we can dispatch event)
-        $this->dispatch('close-modal');
+        $this->isCreateModalOpen = false;
     }
 
-    public function edit($id)
+    public function edit(Category $category)
     {
-        $this->resetValidation();
-        $category = Category::find($id);
-        $this->edit_id = $id;
-        $this->name = $category->name;
-        $this->old_image = $category->image; // Keep existing image path
-        $this->new_image = null; // Reset new image
-
-        $this->dispatch('open-edit-modal');
+        $this->form->setCategory($category);
+        $this->isEditModalOpen = true;
     }
 
     public function updateCategory()
     {
-        $this->validate([
-            'name' => $this->rules()['name'],
-            'new_image' => $this->rules()['new_image'],
-        ]);
-
-        $category = Category::find($this->edit_id);
-
-        $data = [
-            'name' => $this->name,
-        ];
-
-        if ($this->new_image) {
-            $data['image'] = $this->uploadImage($this->new_image);
-        }
-
-        $category->update($data);
-
-        $this->resetInput();
+        $this->form->update();
         session()->flash('message', 'Category updated successfully!');
-        $this->dispatch('close-modal');
-    }
-
-    public function messages()
-    {
-        return [
-            'name.regex' => 'Invalid name..please enter only text',
-            'name.required' => 'Name is required',
-            'image.required' => 'Image is required',
-            'image.mimes' => 'Invalid file format.pls upload only images',
-            'new_image.mimes' => 'Invalid file format.pls upload only images',
-        ];
+        $this->isEditModalOpen = false;
     }
 
     public function deleteId($id)
     {
         $this->delete_id = $id;
-        $this->dispatch('open-delete-modal');
+        $this->confirmingCategoryDeletion = true;
     }
 
     public function deleteCategory()
     {
         $category = Category::find($this->delete_id);
         if ($category) {
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
             $category->delete();
             session()->flash('message', 'Category deleted successfully!');
         }
-        $this->dispatch('close-modal');
-    }
-
-    public function show($id)
-    {
-        $this->view_category = Category::find($id);
-        $this->dispatch('open-preview-modal');
-    }
-
-    public function resetInput()
-    {
-        $this->name = '';
-        $this->image = null;
-        $this->new_image = null;
-        $this->old_image = null;
-        $this->edit_id = null;
+        $this->confirmingCategoryDeletion = false;
         $this->delete_id = null;
-        $this->view_category = null;
     }
 
-    private function uploadImage($file)
+    public function show(Category $category)
     {
-        return $file->store('categories', 'public');
+        $this->viewingCategory = $category;
+        $this->isPreviewModalOpen = true;
     }
 
     public function render()
@@ -169,7 +86,6 @@ class CategoryManagementComponent extends Component
         $categories = Category::search($this->search)->get();
 
         return view('livewire.category-management-component', [
-            // Return all categories
             'categories' => $categories,
         ])->layout('components.layouts.admin', [
                     'title' => 'Manage Categories',
