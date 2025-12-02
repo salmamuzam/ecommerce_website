@@ -16,13 +16,18 @@ class CartComponent extends Component
     {
         $this->cart = session()->get('cart', []);
 
-        // Sync missing descriptions
+        // Sync missing details (description, image)
         $updated = false;
         foreach ($this->cart as $id => $item) {
-            if (!isset($item['description'])) {
+            if (!isset($item['description']) || !isset($item['image'])) {
                 $product = \App\Models\Product::find($id);
                 if ($product) {
-                    $this->cart[$id]['description'] = $product->description;
+                    if (!isset($item['description'])) {
+                        $this->cart[$id]['description'] = $product->description;
+                    }
+                    if (!isset($item['image'])) {
+                        $this->cart[$id]['image'] = $product->image;
+                    }
                     $updated = true;
                 }
             }
