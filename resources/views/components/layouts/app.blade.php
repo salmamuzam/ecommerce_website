@@ -16,7 +16,7 @@
 <body>
     <header class="flex shadow-md py-3 px-4 sm:px-10 bg-white min-h-[70px] tracking-wide relative z-50">
         <div class="flex flex-wrap items-center justify-between w-full lg:gap-y-4 gap-y-6 gap-x-4">
-            <a href="javascript:void(0)"><img src="images/aaliyah_collection_logo.png" alt="logo" class="w-10" />
+            <a href="/"><img src="{{ asset('images/aaliyah_collection_logo.png') }}" alt="logo" class="w-10" />
             </a>
 
             <div id="collapseMenu"
@@ -37,7 +37,7 @@
                 <ul
                     class="lg:flex lg:gap-x-10 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-2/3 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-4 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
                     <li class="hidden mb-6 max-lg:block">
-                        <a href="javascript:void(0)"><img src="images/aaliyah_collection_logo.png" alt="logo"
+                        <a href="/"><img src="{{ asset('images/aaliyah_collection_logo.png') }}" alt="logo"
                                 class="w-10" />
                         </a>
                     </li>
@@ -80,12 +80,19 @@
                             <p class="mt-1 text-sm text-gray-500">Mange Your Account</p>
                             <hr class="my-4 border-b-0 border-gray-300" />
                             <ul class="space-y-1.5">
-                                <li><a href='javascript:void(0)'
+                                <li><a href="{{ route('profile.show') }}"
                                         class="text-sm text-gray-500 hover:text-slate-900">Profile</a></li>
-                                <li><a href='javascript:void(0)' class="text-sm text-gray-500 hover:text-slate-900">API
-                                        Tokens</a></li>
-                                <li><a href='javascript:void(0)'
-                                        class="text-sm text-gray-500 hover:text-slate-900">Logout</a></li>
+                                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                                    <li><a href="{{ route('api-tokens.index') }}" class="text-sm text-gray-500 hover:text-slate-900">API
+                                            Tokens</a></li>
+                                @endif
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}" x-data>
+                                        @csrf
+                                        <a href="{{ route('logout') }}" @click.prevent="$root.submit();"
+                                            class="text-sm text-gray-500 hover:text-slate-900">Logout</a>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -150,8 +157,8 @@
     <footer class="tracking-wide bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
         <div class="w-full max-w-screen-xl p-4 mx-auto md:py-8">
             <div class="sm:flex sm:items-center sm:justify-between">
-                <a href="https://flowbite.com/" class="flex items-center mb-4 space-x-3 sm:mb-0 rtl:space-x-reverse">
-                    <img src="images/aaliyah_collection_logo.png" class="h-7" alt="Aaliyah's Collection Logo" />
+                <a href="/" class="flex items-center mb-4 space-x-3 sm:mb-0 rtl:space-x-reverse">
+                    <img src="{{ asset('images/aaliyah_collection_logo.png') }}" class="h-7" alt="Aaliyah's Collection Logo" />
                     <span
                         class="self-center text-2xl font-semibold text-teal-900 text-heading whitespace-nowrap">Aaliyah's
                         Collection</span>
@@ -172,7 +179,7 @@
                 </ul>
             </div>
             <hr class="my-6 border-teal-900 sm:mx-auto lg:my-8" />
-            <span class="block text-sm text-teal-900 text-body sm:text-center">© 2025 <a href="https://flowbite.com/"
+            <span class="block text-sm text-teal-900 text-body sm:text-center">© 2025 <a href="/"
                     class="text-teal-900 hover:underline">Aaliyah's Collection</a>. All Rights Reserved.</span>
         </div>
     </footer>
