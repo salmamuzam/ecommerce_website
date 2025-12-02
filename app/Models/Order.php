@@ -15,6 +15,10 @@ class Order extends Model
         'total_price',
     ];
 
+    protected $casts = [
+        'status' => \App\Enums\OrderStatus::class,
+    ];
+
     // Relationships
 
     // Every order belongs to one product

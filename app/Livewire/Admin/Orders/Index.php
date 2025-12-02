@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin\Orders;
 
 use App\Mail\OrderApprovalMail;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
-class OrderManagementComponent extends Component
+class Index extends Component
 {
     // Approve order button
     // Changes from pending to approved
@@ -21,7 +21,7 @@ class OrderManagementComponent extends Component
         // If the order exists, approve the mail
         if ($order) {
 
-            $order->update(['status' => 'approved']);
+            $order->update(['status' => \App\Enums\OrderStatus::APPROVED]);
 
             // Send the email to the user
 
@@ -46,7 +46,7 @@ class OrderManagementComponent extends Component
         $order = Order::find($orderId);
 
         // Pending or Approved to Cancelled
-        $order->update(['status' => 'cancelled']);
+        $order->update(['status' => \App\Enums\OrderStatus::CANCELLED]);
 
         session()->flash('message', 'Order cancelled successfully!');
 
@@ -56,7 +56,7 @@ class OrderManagementComponent extends Component
     {
         // Return the view
 
-        return view('livewire.order-management-component', ['orders' => Order::with('product', 'user')->get()])->layout('components.layouts.admin', ['title' => 'Manage Orders']);
+        return view('livewire.admin.orders.index', ['orders' => Order::with('product', 'user')->get()])->layout('components.layouts.admin', ['title' => 'Manage Orders']);
 
     }
 }

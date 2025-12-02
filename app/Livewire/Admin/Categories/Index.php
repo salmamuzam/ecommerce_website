@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin\Categories;
 
 use App\Livewire\Forms\CategoryForm;
 use App\Models\Category;
@@ -8,7 +8,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryManagementComponent extends Component
+class Index extends Component
 {
     use WithFileUploads;
 
@@ -85,7 +85,7 @@ class CategoryManagementComponent extends Component
     {
         $categories = Category::search($this->search)->get();
 
-        return view('livewire.category-management-component', [
+        return view('livewire.admin.categories.index', [
             'categories' => $categories,
         ])->layout('components.layouts.admin', [
                     'title' => 'Manage Categories',

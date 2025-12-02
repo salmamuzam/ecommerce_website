@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Customer\Products;
 
 use App\Models\Product;
 use Livewire\Component;
 
-class ProductDetailComponent extends Component
+class Show extends Component
 {
     public $product;
 
@@ -68,7 +68,7 @@ class ProductDetailComponent extends Component
     {
         // render the information
 
-        return view('livewire.product-detail-component');
+        return view('livewire.customer.products.show');
 
     }
 }

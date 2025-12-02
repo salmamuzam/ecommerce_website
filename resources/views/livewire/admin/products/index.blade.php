@@ -17,9 +17,7 @@
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative w-full">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
+                                    <x-icon.search class="size-6" />
                                 </div>
                                 <input type="text" wire:model.live="search" id="simple-search" placeholder="Search for products" required="" class="bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full pl-10 p-2">
                             </div>
@@ -27,16 +25,12 @@
                     </div>
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0 relative">
                         <button type="button" wire:click="create" class="flex items-center justify-center text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-4 py-2 border border-transparent focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
+                            <x-icon.plus class="size-6 mr-2" />
                             Add product
                         </button>
                         <div class="relative w-full md:w-auto">
                             <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-teal-700 focus:z-10 focus:ring-4 focus:ring-gray-200" type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-                                </svg>
+                                <x-icon.filter class="size-6 mr-2" />
                                 Filter options
                                 <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
@@ -55,9 +49,7 @@
                                     <h2 id="category-heading">
                                         <button type="button" class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50" data-accordion-target="#category-body" aria-expanded="true" aria-controls="category-body">
                                             <span>Category</span>
-                                            <svg aria-hidden="true" data-accordion-icon="" class="w-5 h-5 rotate-180 shrink-0" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                            </svg>
+                                            <x-icon.chevron-down class="w-5 h-5 rotate-180 shrink-0" />
                                         </button>
                                     </h2>
                                     <div id="category-body" class="hidden" aria-labelledby="category-heading">
@@ -76,9 +68,7 @@
                                     <h2 id="price-heading">
                                         <button type="button" class="flex items-center justify-between w-full py-2 px-1.5 text-sm font-medium text-left text-gray-500 border-b border-gray-200 hover:bg-gray-50" data-accordion-target="#price-body" aria-expanded="true" aria-controls="price-body">
                                             <span>Price (LKR)</span>
-                                            <svg aria-hidden="true" data-accordion-icon="" class="w-5 h-5 rotate-180 shrink-0" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                            </svg>
+                                            <x-icon.chevron-down class="w-5 h-5 rotate-180 shrink-0" />
                                         </button>
                                     </h2>
                                     <div id="price-body" class="hidden" aria-labelledby="price-heading">
@@ -93,9 +83,7 @@
                         <div class="flex items-center space-x-3 w-full md:w-auto relative">
                             <button id="actionsDropdownButton" data-dropdown-toggle="actionsDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-teal-700 focus:z-10 focus:ring-4 focus:ring-gray-200" type="button">
                                 Actions
-                                <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                </svg>
+                                <x-icon.chevron-down class="-mr-1 ml-1.5 w-5 h-5" />
                             </button>
                             <div id="actionsDropdown" class="absolute right-0 hidden z-10 w-full md:w-44 bg-white rounded divide-y divide-gray-100 shadow" wire:ignore.self>
 
@@ -108,27 +96,27 @@
                 </div>
                 <!-- Desktop Table View -->
                 <div class="hidden md:block overflow-x-auto">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-transparent whitespace-nowrap">
-                            <tr>
-                                <th scope="col" class="p-4 text-center">
+                    <x-table>
+                        <x-table.head>
+                            <x-table.row>
+                                <x-table.heading>
                                     <div class="flex items-center justify-center">
                                         <input id="checkbox-all" type="checkbox" wire:model.live="selectAll" class="w-4 h-4 text-teal-600 bg-gray-100 rounded border-gray-300 focus:ring-teal-500 focus:ring-2">
                                         <label for="checkbox-all" class="sr-only">checkbox</label>
                                     </div>
-                                </th>
-                                <th scope="col" class="p-4 text-center">Image</th>
-                                <th scope="col" class="p-4 text-center">Title</th>
-                                <th scope="col" class="p-4 text-center">Description</th>
-                                <th scope="col" class="p-4 text-center">Category</th>
-                                <th scope="col" class="p-4 text-center">Price (LKR)</th>
-                                <th scope="col" class="p-4 text-center">Popular</th>
-                                <th scope="col" class="p-4 text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </x-table.heading>
+                                <x-table.heading>Image</x-table.heading>
+                                <x-table.heading>Title</x-table.heading>
+                                <x-table.heading>Description</x-table.heading>
+                                <x-table.heading>Category</x-table.heading>
+                                <x-table.heading>Price (LKR)</x-table.heading>
+                                <x-table.heading>Popular</x-table.heading>
+                                <x-table.heading>Actions</x-table.heading>
+                            </x-table.row>
+                        </x-table.head>
+                        <x-table.body>
                             @forelse($products as $product)
-                                <tr class="border-b hover:bg-gray-50">
+                                <x-table.row>
                                     <td class="p-4 w-4 text-center align-middle">
                                         <div class="flex items-center justify-center">
                                             <input id="checkbox-table-search-{{ $product->id }}" type="checkbox" value="{{ $product->id }}" wire:model.live="selectedProducts" class="w-4 h-4 text-teal-600 bg-gray-100 rounded border-gray-300 focus:ring-teal-500 focus:ring-2">
@@ -140,9 +128,7 @@
                                             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->title }}" class="h-10 w-auto rounded mx-auto">
                                         @else
                                             <div class="h-10 w-10 rounded bg-gray-200 flex items-center justify-center text-gray-500 mx-auto">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                                </svg>
+                                                <x-icon.photo class="size-6" />
                                             </div>
                                         @endif
                                     </td>
@@ -177,56 +163,45 @@
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap text-center align-middle">
                                         <div class="flex items-center justify-center space-x-4">
                                             <button wire:click="edit({{ $product->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                                </svg>
+                                            <x-icon.pencil class="size-4 md:mr-2" />
                                                 Edit
                                             </button>
                                             <button wire:click="show({{ $product->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                </svg>
+                                            <x-icon.eye class="size-4 md:mr-2" />
                                                 <span class="hidden md:inline">Preview</span>
                                             </button>
                                             <button wire:click="deleteId({{ $product->id }})" class="flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-lg hover:bg-red-50 focus:ring-4 focus:ring-red-300 focus:outline-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 md:mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                </svg>
+                                            <x-icon.trash class="size-4 md:mr-2" />
                                                 Delete
                                             </button>
                                         </div>
                                     </td>
-                                </tr>
+                                </x-table.row>
                             @empty
                                 <tr>
                                             <button type="button" wire:click="create" class="text-white bg-teal-600 hover:bg-teal-700 focus:ring-4 focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none flex items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
+                                                <x-icon.plus class="size-6 mr-2" />
                                                 Add Product
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
                             @endforelse
-                        </tbody>
-                    </table>
+                        </x-table.body>
+                    </x-table>
                 </div>
 
                 <!-- Mobile Card View -->
                 <div class="block md:hidden mx-4">
                     @forelse($products as $product)
-                        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4 overflow-hidden">
-                            <div class="p-4 flex flex-col items-center space-y-2 text-center">
+                        <x-card>
+                            <x-card.body class="flex flex-col items-center space-y-2 text-center">
                                 <!-- Image -->
                                 @if($product->image)
                                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->title }}" class="h-20 w-20 rounded object-cover mb-2">
                                 @else
                                     <div class="h-20 w-20 rounded bg-gray-200 flex items-center justify-center text-gray-500 mb-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                        </svg>
+                                        <x-icon.photo class="size-8" />
                                     </div>
                                 @endif
 
@@ -263,28 +238,21 @@
                                 <p class="text-sm text-gray-500 line-clamp-2 max-w-xs">
                                     {{ $product->description }}
                                 </p>
-                            </div>
+                            </x-card.body>
 
                             <!-- Actions -->
-                            <div class="bg-gray-50 px-4 py-3 flex justify-center space-x-6 border-t border-gray-100">
+                            <x-card.footer class="flex justify-center space-x-6">
                                 <button wire:click="edit({{ $product->id }})" class="text-blue-600 hover:text-blue-900">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                    </svg>
+                                    <x-icon.pencil class="size-6" />
                                 </button>
                                 <button wire:click="show({{ $product->id }})" class="text-gray-600 hover:text-gray-900">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                    </svg>
+                                    <x-icon.eye class="size-6" />
                                 </button>
                                 <button wire:click="deleteId({{ $product->id }})" class="text-red-600 hover:text-red-900">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                    </svg>
+                                    <x-icon.trash class="size-6" />
                                 </button>
-                            </div>
-                        </div>
+                            </x-card.footer>
+                        </x-card>
                     @empty
                         <div class="flex flex-col items-center justify-center py-6 bg-white rounded-lg shadow-sm border border-gray-200">
                             <div class="bg-gray-100 rounded-full p-4 mb-4">
@@ -346,9 +314,7 @@
                     </div>
                 </div>
                 <button type="submit" class="w-full text-white inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mr-2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
+                    <x-icon.plus class="size-6 mr-2" />
                     Add new product
                 </button>
             </form>
@@ -397,7 +363,7 @@
                     </div>
                 </div>
                 <button type="submit" class="text-white w-full inline-flex justify-center items-center bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 012 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                    <x-icon.pencil class="me-1 -ms-1 w-5 h-5" />
                     Update product
                 </button>
             </form>
@@ -407,9 +373,7 @@
     <!-- Delete Product Modal -->
     <x-custom-confirmation-modal wire:model.live="confirmingProductDeletion" maxWidth="md">
         <x-slot name="content">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-            </svg>
+            <x-icon.exclamation-circle class="mx-auto mb-4 text-black w-12 h-12" />
             <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete this product?</h3>
             <button wire:click="deleteProduct" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                 Yes, I'm sure
@@ -421,9 +385,7 @@
     <!-- Mass Delete Product Modal -->
     <x-custom-confirmation-modal wire:model.live="confirmingMultipleProductDeletion" maxWidth="md">
         <x-slot name="content">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto mb-4 text-black w-12 h-12">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-            </svg>
+            <x-icon.exclamation-circle class="mx-auto mb-4 text-black w-12 h-12" />
             <h3 class="mb-5 text-lg font-normal text-gray-500">Are you sure you want to delete the selected products?</h3>
             <button wire:click="confirmDeleteSelected" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                 Yes, delete all
@@ -444,9 +406,7 @@
                     <img src="{{ asset('storage/' . $viewingProduct->image) }}" alt="{{ $viewingProduct->title }}" class="mx-auto h-48 object-cover rounded-lg">
                 @else
                     <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                        </svg>
+                        <x-icon.photo class="size-12" />
                     </div>
                 @endif
             </div>

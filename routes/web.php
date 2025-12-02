@@ -1,14 +1,10 @@
 <?php
 
-use App\Livewire\CartComponent;
-use App\Livewire\ProductDetailComponent;
-use App\Livewire\ShopComponent;
+use App\Livewire\Customer\Products\Show as ProductShow;
+use App\Livewire\Customer\Shop\Index as Shop;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GoogleController;
-use App\Livewire\CategoryManagementComponent;
-use App\Livewire\OrderManagementComponent;
-use App\Livewire\ProductManagementComponent;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -32,29 +28,17 @@ route::get('/home', [HomeController::class, 'index']);
 
 // Route route based on middleware
 // Must be verified, and must be an admin to access the following routes
-route::middleware(['auth', 'admin'])->group(function () {
 
-    route::get('/adminDashboard', [HomeController::class, 'adminDashboard']);
 
-    Route::get('/admin/categories', CategoryManagementComponent::class)->name('admin.categories');
-
-    Route::get('/admin/products', ProductManagementComponent::class)->name('admin.products');
-
-    Route::get('/admin/orders', OrderManagementComponent::class)->name('admin.orders');
-});
-
-Route::get('/shop', ShopComponent::class)->name('products.shop');
+Route::get('/shop', Shop::class)->name('products.shop');
 
 // Load products by id
-Route::get('/product/{id}', ProductDetailComponent::class)->name('product.show');
+Route::get('/product/{id}', ProductShow::class)->name('product.show');
 
 //TODO: Create Category Controller
-Route::get('/category/{id}', [CategoryController::class, 'index'])->name('category.show');
+// Route::get('/category/{id}', [CategoryController::class, 'index'])->name('category.show');
 
-Route::middleware(['auth',  'customer'])->group(function(){
-// Only customer can view this page
-Route::get('/cart', CartComponent::class)->name('cart');
-});
+
 
 
 route::get('auth/google', [GoogleController::class, 'googlePage'])->name('auth.google');

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Admin\Products;
 
 use App\Livewire\Forms\ProductForm;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ProductService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
 
-class ProductManagementComponent extends Component
+class Index extends Component
 {
     use WithFileUploads;
     use WithPagination;
@@ -114,14 +114,11 @@ class ProductManagementComponent extends Component
         $this->confirmingProductDeletion = true;
     }
 
-    public function deleteProduct()
+    public function deleteProduct(ProductService $productService)
     {
         $product = Product::find($this->deletingId);
         if ($product) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $product->delete();
+            $productService->deleteProduct($product);
             session()->flash('message', 'Product deleted successfully!');
         }
         $this->confirmingProductDeletion = false;
@@ -133,15 +130,10 @@ class ProductManagementComponent extends Component
         $this->confirmingMultipleProductDeletion = true;
     }
 
-    public function confirmDeleteSelected()
+    public function confirmDeleteSelected(ProductService $productService)
     {
-        $products = Product::whereIn('id', $this->selectedProducts)->get();
-        foreach ($products as $product) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $product->delete();
-        }
+        $productService->deleteProducts($this->selectedProducts);
+
         $this->selectedProducts = [];
         $this->selectAll = false;
         session()->flash('message', 'Selected products deleted successfully!');
@@ -154,46 +146,38 @@ class ProductManagementComponent extends Component
         $this->isPreviewModalOpen = true;
     }
 
-    public function togglePopular(Product $product)
+    public function togglePopular(Product $product, ProductService $productService)
     {
-        $product->is_popular = !$product->is_popular;
-        $product->save();
+        $productService->togglePopularity($product);
         session()->flash('message', 'Product popularity updated!');
     }
 
-    public function updatedSelectAll($value)
+    public function updatedSelectAll($value, ProductService $productService)
     {
         if ($value) {
-            $this->selectedProducts = $this->getProductsQuery()->pluck('id')->map(fn($id) => (string) $id)->toArray();
+            $this->selectedProducts = $productService->getFilteredProductsQuery(
+                $this->search,
+                $this->selectedCategories,
+                $this->priceFrom,
+                $this->priceTo
+            )->pluck('id')->map(fn($id) => (string) $id)->toArray();
         } else {
             $this->selectedProducts = [];
         }
     }
 
-    public function getProductsQuery()
+    public function render(ProductService $productService)
     {
-        return Product::query()
-            ->when($this->search, function ($query) {
-                $query->where('title', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%');
-            })
-            ->when($this->selectedCategories, function ($query) {
-                $query->whereIn('category_id', $this->selectedCategories);
-            })
-            ->when($this->priceFrom, function ($query) {
-                $query->where('price', '>=', $this->priceFrom);
-            })
-            ->when($this->priceTo, function ($query) {
-                $query->where('price', '<=', $this->priceTo);
-            });
-    }
+        $products = $productService->getFilteredProductsQuery(
+            $this->search,
+            $this->selectedCategories,
+            $this->priceFrom,
+            $this->priceTo
+        )->paginate($this->perPage);
 
-    public function render()
-    {
-        $products = $this->getProductsQuery()->paginate($this->perPage);
         $categories = Category::all();
 
-        return view('livewire.product-management-component', [
+        return view('livewire.admin.products.index', [
             'products' => $products,
             'categories' => $categories,
         ])->layout('components.layouts.admin', [
