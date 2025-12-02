@@ -8,14 +8,14 @@ use Livewire\Component;
 class Index extends Component
 {
     public $cart = [];
-
     public $total = 0;
 
+    // Initialize cart state
     public function mount(CartService $cartService)
     {
         $this->cart = session()->get('cart', []);
 
-        // Sync missing details using service
+        // Sync missing details using service (e.g., images)
         $cartService->syncCartDetails();
 
         // Refresh cart from session after sync
@@ -24,6 +24,7 @@ class Index extends Component
         $this->total = $cartService->calculateTotal();
     }
 
+    // Remove an item from the cart
     public function removeFromCart($productId, CartService $cartService)
     {
         $cartService->removeFromCart($productId);
@@ -34,7 +35,7 @@ class Index extends Component
         $this->dispatch('cart-alert', type: 'success', message: 'Product removed from cart.');
     }
 
-
+    // Update the quantity of an item in the cart
     public function updateQuantity($productId, $quantity, CartService $cartService)
     {
         $cartService->updateQuantity($productId, $quantity);
@@ -45,6 +46,7 @@ class Index extends Component
         $this->dispatch('cart-alert', type: 'success', message: 'Cart updated successfully.');
     }
 
+    // Confirm and place the order
     public function confirmOrder(CartService $cartService)
     {
         $result = $cartService->createOrder();
@@ -60,6 +62,7 @@ class Index extends Component
         session()->flash('message', $result['message']);
     }
 
+    // Render the cart view
     public function render()
     {
         return view('livewire.customer.cart.index', ['cart' => $this->cart, 'total' => $this->total]);

@@ -13,6 +13,7 @@ class Index extends Component
 {
     use WithPagination;
 
+    // Filter properties
     public $selectedCategories = [];
     public $min_price = 0;
     public $max_price = 1000; // Default fallback
@@ -20,12 +21,15 @@ class Index extends Component
     public $orderBy = 'Default Sorting';
     public $pageSize = 12;
 
+    // Initialize component state
     public function mount()
     {
+        // Set max price based on highest product price in DB
         $this->db_max_price = ceil(Product::max('price') / 1000) * 1000;
         $this->max_price = $this->db_max_price;
     }
 
+    // Reset all filters to default
     public function resetFilters()
     {
         $this->selectedCategories = [];
@@ -35,11 +39,13 @@ class Index extends Component
         $this->resetPage();
     }
 
+    // Load more products (pagination)
     public function loadMore()
     {
         $this->pageSize += 12;
     }
 
+    // Add a product to the cart
     public function addToCart($productId, CartService $cartService)
     {
         $result = $cartService->addToCart($productId);
@@ -53,6 +59,7 @@ class Index extends Component
         session()->flash('message', $result['message']);
     }
 
+    // Render the shop view with filtered products
     public function render(ProductService $productService)
     {
         $categories = Category::all();

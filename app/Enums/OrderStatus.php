@@ -24,11 +24,11 @@ enum OrderStatus: string
     public function color(): string
     {
         return match ($this) {
-            self::PENDING => 'text-yellow-600 bg-yellow-100',
-            self::APPROVED => 'text-blue-600 bg-blue-100',
-            self::REJECTED => 'text-red-600 bg-red-100',
-            self::COMPLETED => 'text-green-600 bg-green-100',
-            self::CANCELLED => 'text-gray-600 bg-gray-100',
+            self::PENDING => 'text-yellow-800 bg-yellow-100',
+            self::APPROVED => 'text-green-800 bg-green-100',
+            self::REJECTED => 'text-red-800 bg-red-100',
+            self::COMPLETED => 'text-green-800 bg-green-100',
+            self::CANCELLED => 'text-orange-800 bg-orange-100',
         };
     }
 }

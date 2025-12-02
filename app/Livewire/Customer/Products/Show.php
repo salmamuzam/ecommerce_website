@@ -22,9 +22,10 @@ class Show extends Component
         $this->product = Product::findOrFail($id);
     }
 
+    // Add the current product to the cart
     public function addToCart($productId)
     {
-        // add to cart button
+        // Find product
         $product = Product::find($productId);
 
         if (!$product) {
@@ -64,10 +65,9 @@ class Show extends Component
         $this->dispatch('show-success-modal');
     }
 
+    // Render the product detail view
     public function render()
     {
-        // render the information
-
         return view('livewire.customer.products.show');
 
     }

@@ -14,11 +14,12 @@ class Index extends Component
 
     public CategoryForm $form;
 
-    // State
+    // State properties
     public $search = '';
     public $delete_id;
     public ?Category $viewingCategory = null;
 
+    // Modal state
     public $isCreateModalOpen = false;
     public $isEditModalOpen = false;
     public $confirmingCategoryDeletion = false;
@@ -29,12 +30,14 @@ class Index extends Component
         // No need to fetch categories here
     }
 
+    // Open the create category modal
     public function create()
     {
         $this->form->reset();
         $this->isCreateModalOpen = true;
     }
 
+    // Save a new category
     public function saveCategory()
     {
         $this->form->store();
@@ -42,12 +45,14 @@ class Index extends Component
         $this->isCreateModalOpen = false;
     }
 
+    // Open the edit category modal
     public function edit(Category $category)
     {
         $this->form->setCategory($category);
         $this->isEditModalOpen = true;
     }
 
+    // Update an existing category
     public function updateCategory()
     {
         $this->form->update();
@@ -55,12 +60,14 @@ class Index extends Component
         $this->isEditModalOpen = false;
     }
 
+    // Confirm deletion of a category
     public function deleteId($id)
     {
         $this->delete_id = $id;
         $this->confirmingCategoryDeletion = true;
     }
 
+    // Delete the confirmed category
     public function deleteCategory()
     {
         $category = Category::find($this->delete_id);
@@ -75,12 +82,14 @@ class Index extends Component
         $this->delete_id = null;
     }
 
+    // Show category details in a modal
     public function show(Category $category)
     {
         $this->viewingCategory = $category;
         $this->isPreviewModalOpen = true;
     }
 
+    // Render the component view with searched categories
     public function render()
     {
         $categories = Category::search($this->search)->get();
